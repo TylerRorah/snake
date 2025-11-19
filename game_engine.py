@@ -20,6 +20,20 @@ class GameEngine:
         Args:
             key: Pygame key constant.
         """
+        # Handle pause toggle
+        if key == pygame.K_p:
+            self.state.toggle_pause()
+            return
+
+        # Handle restart when game over
+        if key == pygame.K_r and self.state.game_over:
+            self.reset()
+            return
+
+        # Don't process direction changes when paused
+        if self.state.paused:
+            return
+
         direction_map = {
             pygame.K_w: 'UP',
             pygame.K_UP: 'UP',
@@ -75,6 +89,10 @@ class GameEngine:
     def is_game_over(self):
         """Check if game is over."""
         return self.state.game_over
+
+    def is_paused(self):
+        """Check if game is paused."""
+        return self.state.paused
 
     def is_running(self):
         """Check if game loop should continue."""

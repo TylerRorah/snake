@@ -42,6 +42,10 @@ class TestGameEngineInitialization:
         engine = GameEngine()
         assert engine.is_running() == True
 
+    def test_game_not_paused_initially(self):
+        engine = GameEngine()
+        assert engine.is_paused() == False
+
 
 class TestGameEngineInput:
     """Tests for input handling."""
@@ -83,6 +87,50 @@ class TestGameEngineInput:
         engine.snake.direction = 'UP'  # Change from RIGHT first
         engine.handle_input(pygame.K_d)
         assert engine.snake.direction == 'RIGHT'
+
+    def test_handle_p_key_toggles_pause(self):
+        import pygame
+        pygame.K_p = 112
+        engine = GameEngine()
+        engine.handle_input(pygame.K_p)
+        assert engine.is_paused() == True
+
+    def test_handle_p_key_unpauses(self):
+        import pygame
+        pygame.K_p = 112
+        engine = GameEngine()
+        engine.handle_input(pygame.K_p)
+        engine.handle_input(pygame.K_p)
+        assert engine.is_paused() == False
+
+    def test_direction_change_ignored_when_paused(self):
+        import pygame
+        pygame.K_p = 112
+        pygame.K_w = 119
+        engine = GameEngine()
+        engine.handle_input(pygame.K_p)  # Pause
+        engine.handle_input(pygame.K_w)  # Try to change direction
+        assert engine.snake.direction == 'RIGHT'  # Should remain RIGHT
+
+    def test_handle_r_key_restarts_when_game_over(self):
+        import pygame
+        pygame.K_r = 114
+        engine = GameEngine()
+        engine.state.increment_score()
+        engine.state.increment_score()
+        engine.state.end_game()
+        engine.handle_input(pygame.K_r)
+        assert engine.get_score() == 0
+        assert engine.is_game_over() == False
+
+    def test_handle_r_key_ignored_when_not_game_over(self):
+        import pygame
+        pygame.K_r = 114
+        engine = GameEngine()
+        engine.state.increment_score()
+        engine.handle_input(pygame.K_r)
+        # Score should not reset when game is not over
+        assert engine.get_score() == 1
 
 
 class TestGameEngineUpdate:

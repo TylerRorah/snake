@@ -25,6 +25,10 @@ class TestGameStateInitialization:
         state = GameState()
         assert state.game_over == False
 
+    def test_initial_paused_is_false(self):
+        state = GameState()
+        assert state.paused == False
+
 
 class TestGameStateScore:
     """Tests for score management."""
@@ -54,6 +58,23 @@ class TestGameStateControl:
         state.stop_running()
         assert state.running == False
 
+    def test_toggle_pause_from_unpaused(self):
+        state = GameState()
+        state.toggle_pause()
+        assert state.paused == True
+
+    def test_toggle_pause_from_paused(self):
+        state = GameState()
+        state.toggle_pause()
+        state.toggle_pause()
+        assert state.paused == False
+
+    def test_toggle_pause_multiple_times(self):
+        state = GameState()
+        for _ in range(3):
+            state.toggle_pause()
+        assert state.paused == True
+
 
 class TestGameStateReset:
     """Tests for game state reset."""
@@ -77,12 +98,20 @@ class TestGameStateReset:
         state.reset()
         assert state.running == True
 
+    def test_reset_clears_paused(self):
+        state = GameState()
+        state.toggle_pause()
+        state.reset()
+        assert state.paused == False
+
     def test_full_reset(self):
         state = GameState()
         state.increment_score()
         state.end_game()
         state.stop_running()
+        state.toggle_pause()
         state.reset()
         assert state.score == 0
         assert state.running == True
         assert state.game_over == False
+        assert state.paused == False

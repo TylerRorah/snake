@@ -23,7 +23,10 @@ SCORE_FONT_SIZE = 50
 GAME_OVER_FONT = 'times new roman'
 GAME_OVER_FONT_SIZE = 90
 FINAL_SCORE_FONT = 'times'
-FINAL_SCORE_FONT_SIZE = 20
+FINAL_SCORE_FONT_SIZE = 50
+PAUSE_FONT = 'consolas'
+PAUSE_FONT_SIZE = 70
+INSTRUCTION_FONT_SIZE = 30
 
-# Game over delay (seconds)
-GAME_OVER_DELAY = 3
+# High score file
+HIGH_SCORE_FILE = 'high_score.txt'

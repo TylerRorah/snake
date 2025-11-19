@@ -8,6 +8,7 @@ class GameState:
         self.score = 0
         self.running = True
         self.game_over = False
+        self.paused = False
 
     def increment_score(self):
         """Increase score by 1."""
@@ -18,6 +19,11 @@ class GameState:
         self.score = 0
         self.running = True
         self.game_over = False
+        self.paused = False
+
+    def toggle_pause(self):
+        """Toggle the paused state."""
+        self.paused = not self.paused
 
     def end_game(self):
         """Mark the game as over."""
